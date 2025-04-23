@@ -1,0 +1,532 @@
+{% extends 'index_master.html' %}
+{% load static %}
+{% load filters  %}
+{% block Titulo %}
+  AppSemaforo| Listado de Productos
+{% endblock Titulo%}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'FrWork/admin_lte/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'FrWork/admin_lte/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/calificaciones.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/bombilla.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/graficos.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+  <!-- page content -->
+  <div class="right_col" role="main"> 
+    <!-- top tiles --> 
+    <h1>Plan de desarrollo</h1> 
+    {% if messages %} 
+      {% for message in messages %} 
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div> 
+      {% endfor %} 
+    {% endif %} 
+    <div class="row"> 
+      <div class="col-md-6 col-sm-6 col-xs-12"> 
+        <div class="x_panel"> 
+          <div class="x_title"> 
+            <h2>Gráfico de Torta</h2> 
+          </div> 
+          <div class="x_content"> 
+            <div id="echart_pie" style="height:350px;"></div> 
+          </div> 
+        </div> 
+      </div> 
+      <div class="col-md-6 col-sm-6 col-xs-12"> 
+        <div class="x_panel"> 
+          <div class="x_title"> 
+            <h2>Gráfico de Líneas</h2> 
+          </div> 
+          <div class="x_content"> 
+            <div id="echart_line" style="height:350px;"></div> 
+          </div> 
+        </div> 
+      </div> 
+    </div>
+  
+ 
+     
+   
+<table id="tabla-usuarios" class="table table-striped table-bordered table-responsive" cellspacing="0" width="100%">
+  <thead class="thead-dark">
+    {%if request.user.is_staff and not request.user.is_guest%}
+    <a title="Agregar Meta" href="{% url "agregar_producto"%}" class="btn btn-primary"><i class="fa fa-flag"> </i> Nueva Meta</a>
+    
+    {% endif %}
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Linea estratégica</th>
+      <th scope="col">Responable</th>
+      <th scope="col">Pilar Sectorial</th>
+      <th scope="col">Programa</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descripción</th>
+      <th scope="col">Indicador</th>
+      <th scope="col">Usuario Asignado</th>
+      <th scope="col">Prioridad</th>
+      <th scope="col">Estado Progreso</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Progreso</th>
+      <th scope="col">Vigencia</th>
+      <th scope="col">Presupuesto Utilizado</th>
+      <th scope="col">Calificación</th>
+
+      
+      <th scope="col">Opciones</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {% for producto in object_list %}
+    <tr id="fila-{{ producto.id }}">
+      <td>{{ producto.Codigo_producto }}</td>
+      <td>{{ producto.ID_LineaEstrategica }}</td>
+      <td>{{ producto.Secretario_responsable }}</td>
+      <td>{{ producto.ID_Pilar_Sectorial }}</td>
+      <td>{{ producto.ID_programa }}</td>
+      <td>{{ producto.Nombre_Producto }}</td>
+      <td>{{ producto.Descripción }}</td>
+      <td>{{ producto.ID_Indicador }}</td>
+      <td>{{ producto.ID_usuarioAsignado }}</td>
+      <td>{{ producto.Prioridad }}</td>
+      <td> 
+        {% if producto.estado.lower == "activo" or producto.estado.lower == "activo_reprogramado" %}
+          {% if producto.vigencia %}
+            <span class="bombilla {{ producto.color_semaforo }} {{ producto.color_semaforo|parpadeo }}"></span>
+          {% else %}
+            <span class="bombilla-apagada">Sin fecha</span>
+          {% endif %}
+        {% else %}
+          <span class="bombilla-apagada">No aplica</span>
+        {% endif %}
+      </td>
+      
+      
+      <td>{{ producto.estado }}</td>
+      <td class="project_progress">
+        <div class="progress progress_sm" id="progreso-1">
+          <div class="progress-bar bg-green" role="progressbar" id="progreso-1" style="width: {% calcular_porcentaje producto.Valor_actual producto.Meta_Actual %}%;" aria-valuenow="{{ producto.Valor_actual }}" aria-valuemin="0" aria-valuemax="{{ producto.Meta_Actual }}">
+          </div>
+        </div>
+        <small>{% calcular_porcentaje producto.Valor_actual producto.Meta_Actual %}% Completado</small>
+      </td>
+      <td>{{ producto.vigencia }}</td>
+      <td class="project_progress">
+        <div class="progress progress_sm" id="progreso-presupuesto-{{ producto.id }}">
+          <div class="progress-bar bg-green" role="progressbar" id="progreso-presupuesto-{{ producto.id }}" style="width: {% calcular_porcentaje producto.Presupuesto_utilizado producto.presupuesto_total %}%;" aria-valuenow="{{ producto.Presupuesto_utilizado }}" aria-valuemin="0" aria-valuemax="{{ producto.presupuesto_total }}">
+          </div>
+        </div>
+        <small>{% calcular_porcentaje producto.Presupuesto_utilizado producto.presupuesto_total %}% Completado</small>
+      </td>
+      
+      <td><span class="calificacion {{ producto.calcular_calificacion }}">{{ producto.calcular_calificacion }}</span></td>
+      
+      <td>
+        <a title="Más detalles" href="{% url 'detalle_producto' pk=producto.id %}" class="btn btn-primary"><i class="fa  fa-eye"></i></a>
+        {%if request.user.is_staff and not request.user.is_guest%}
+        <a title="Eliminar producto" href="{% url 'eliminar_producto' pk=producto.id %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+        {% endif %}
+        {%if request.user.is_staff or not request.user.is_guest%}
+        <a title="Actualizar producto" href="{% url "actualizar_producto" pk=producto.id %}" class="btn btn-success"><i class="fa fa-refresh"></i></a>
+        {% endif %}
+        {% if request.user.is_staff and not request.user.is_guest and producto.estado == 'Expirada' %}
+        <a title="Reprogramar vigencia" href="{% url "reprogramar_vigencia" pk=producto.id %}" class="btn btn-warning"><i class="fa fa-undo"></i></a>
+        {% endif %}
+      </td>
+      
+      
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="container body" style="padding-bottom: 20px;">
+</div>
+<!-- Modal de confirmación para eliminar registro -->
+<div id="modal-eliminar" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmación de eliminación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar el registro?</p>
+        <p id="mensaje-confirmacion"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-eliminar">Eliminar</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+</div>
+
+  <!-- /top tiles -->
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/jszip/dist/jszip.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/pdfmake.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/vfs_fonts.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/build/js/tabla.js' %}"></script> 
+  <script src="{% static 'FrWork/admin_lte/build/js/graficos.js' %}"></script> 
+  <script src="{% static 'FrWork/admin_lte/build/js/bombilla.js' %}"></script> 
+  <script src="{% static 'FrWork/admin_lte/vendors/echarts/dist/echarts.min.js' %}"></script>
+<script src="{% static 'FrWork/admin_lte/vendors/echarts/map/js/world.js' %}"></script>
+<script>
+  var graficos = { torta: null, linea: null, barras: null };
+
+  $(document).ready(function() {
+    console.log("Documento listo");
+
+    var tabla = $('#tabla-usuarios').DataTable({
+      dom: 'lBfrtip',
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+      },
+      scrollX: true,
+      responsive: true,
+      
+      buttons: [
+        {
+          extend: 'copyHtml5',
+          text: '<i class="fa fa-copy"></i> Copiar',
+          title: 'Mi Reporte',
+          exportOptions: {
+            columns: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13]
+          }
+        },
+        {
+          extend: 'excelHtml5',
+          text: '<i class="fa fa-file-excel-o"></i> Excel',
+          title: 'Mi Reporte',
+          exportOptions: {
+            columns: [0,1, 2, 3, 4, 5, 6, 7,8,9,10, 11, 12, 13,14,15]
+          }
+        },
+        {
+          extend: 'print',
+          text: '<i class="fa fa-print"></i> Imprimir',
+          title: 'Mi Reporte',
+          exportOptions: {
+            columns: [0,1, 2, 3, 4, 5, 6, 7,8,9,10, 11, 12, 13,14,15,16]
+          }
+        }
+      ],
+      columnDefs: [
+        {
+          targets: '_all',
+          className: 'dt-center'
+        }
+      ],
+      initComplete: function() {
+        console.log("Tabla inicializada");
+        cargarDatosGraficos();
+        cargarDatosGraficoLinea(); 
+       
+      }
+    });
+
+    tabla.on('search.dt', function() {
+      cargarDatosGraficos();
+    });
+
+    tabla.on('order.dt', function() {
+      cargarDatosGraficos();
+    });
+
+    tabla.on('page.dt', function() {
+      cargarDatosGraficos();
+    });
+    tabla.on('search.dt', function() {
+    var búsqueda = $('#tabla-usuarios_filter input').val(); // Obtiene el valor del filtro de búsqueda
+    
+    cargarDatosGraficos(búsqueda);
+    cargarDatosGraficoLinea(búsqueda);
+});
+    tabla.on('order.dt', function() {
+      cargarDatosGraficos();
+      cargarDatosGraficoLinea(); // Agrega esta línea
+    });
+    
+    tabla.on('page.dt', function() {
+      var pagina = tabla.page.info().page + 1; // Obtiene la página actual
+      cargarDatosGraficoLinea(pagina);
+  });
+  
+    $('#filtro_nombre, #filtro_programa, #filtro_estado').on('change', function() {
+      cargarDatosGraficos();
+    });
+
+    
+  });
+
+  function cargarDatosGraficos() {
+    var filtro_nombre = $('#filtro_nombre').val();
+    var filtro_programa = $('#filtro_programa').val();
+    var filtro_estado = $('#filtro_estado').val();
+
+    $.ajax({
+      type: 'GET',
+      url: '{% url "obtener_datos_grafico_torta" %}',
+      data: {
+        filtro_nombre: filtro_nombre,
+        filtro_programa: filtro_programa,
+        filtro_estado: filtro_estado
+      },
+      success: function(datos) {
+        actualizarGraficoTorta(datos);
+      },
+      error: function(xhr, status, error) {
+        console.log("Error al cargar datos:", error);
+      }
+    });
+  }
+
+  function actualizarGraficoTorta(datos) {
+    var chartPie = echarts.init(document.getElementById('echart_pie'), {
+        width: '600px',
+        height: '400px'
+    });
+
+    var optionsPie = {
+        title: {
+            text: 'Avance Metas',
+            subtext: 'Gráfico de Torta',
+            left: 'center',
+            textStyle: {
+                color: '#000000',
+                fontSize: 16
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '60%',
+                data: datos,
+                itemStyle: {
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: true,
+                    position: 'outside',
+                    formatter: '{b}: {c} ({d}%)',
+                    textStyle: {
+                        color: '#000000'
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 16
+                    }
+                }
+            }
+        ],
+        legend: {
+            orient: 'horizontal',
+            x: 'center',
+            y: 'bottom',
+            textStyle: {
+                color: '#333'
+            },
+            data: datos.map(function(item) {
+                return item.name;
+            })
+        },
+        color: [
+            '#dc3545', // Rojo (iniciada)
+            '#FFED31', // Amarillo (en progreso)
+            '#1ABB9C', // Verde (completada)
+            '#AAAAAA' // Gris (no iniciada)
+        ],
+        animation: {
+            duration: 2000,
+            easing: 'cubicInOut'
+        },
+        toolbox: {
+            feature: {
+                restore: {
+                    title: 'Restaurar'
+                },
+                saveAsImage: {
+                    title: 'Descargar imagen'
+                },
+                dataView: {
+                    title: 'Ver datos'
+                },
+                magicType: {},
+                refresh: {
+                    title: 'Recargar'
+                }
+            }
+        }
+    };
+
+    chartPie.setOption(optionsPie);
+
+
+
+  }
+  function cargarDatosGraficoLinea(pagina) {
+    var filtro_nombre = $('#filtro_nombre').val();
+    var filtro_programa = $('#filtro_programa').val();
+    var filtro_estado = $('#filtro_estado').val();
+    $.ajax({
+        type: 'GET',
+        url: '{% url "obtener_datos_grafico_linea" %}',
+        data: {
+            filtro_nombre: filtro_nombre,
+            filtro_programa: filtro_programa,
+            filtro_estado: filtro_estado,
+            pagina: pagina
+        },
+        success: function(datos) {
+            actualizarGraficoLinea(datos);
+        },
+        error: function(xhr, status, error) {
+            console.log("Error al cargar datos:", error);
+        }
+    });
+}
+
+function actualizarGraficoLinea(datos) {
+  var chartLine = echarts.init(document.getElementById('echart_line'));
+  var optionsLine = {
+      title: {
+          text: 'Avance Metas',
+          subtext: 'Gráfico de Líneas',
+          left: 'center',
+          textStyle: {
+              color: '#000000',
+              fontSize: 16
+          }
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: function(params) {
+            var resultado = params[0].name + '<br>';
+            params.forEach(function(item) {
+                resultado += item.seriesName + ': ' + item.value + '%<br>';
+            });
+            return resultado;
+        }
+    },
+      xAxis: {
+          type: 'category',
+          data: datos.xAxis,
+          axisLabel: {
+              formatter: function(value) {
+                  return value;
+              }
+          }
+      },
+      yAxis: {
+          type: 'value',
+          min: 0,
+          max: 100,
+          interval: 10,
+          axisLabel: {
+              formatter: function(value) {
+                  return value + '%';
+              }
+          }
+      },
+      series: [
+          {
+              name: 'Progreso',
+              type: 'line',
+              data: datos.series[0].data,
+              itemStyle: {
+                  borderColor: '#FFED31',  // Amarillo
+                  borderWidth: 2,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                  shadowBlur: 10
+              }
+          },
+          {
+              name: 'Presupuesto Utilizado',
+              type: 'line',
+              data: datos.series[1].data,
+              itemStyle: {
+                  borderColor: '#FF0000',  // Rojo
+                  borderWidth: 2,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                  shadowBlur: 10
+              }
+          }
+      ],
+      color: [
+          '#FFED31',  // Amarillo
+          '#FF0000'  // Rojo
+      ],
+      animation: {
+          duration: 2000,
+          easing: 'cubicInOut'
+      },
+      toolbox: {
+          feature: {
+              restore: {
+                  title: 'Restaurar'
+              },
+              saveAsImage: {
+                  title: 'Descargar imagen'
+              },
+              dataView: {
+                  title: 'Ver datos'
+              },
+              magicType: {
+                  title: 'Cambiar tipo de gráfico',
+                  type: ['line', 'bar', 'stack', 'tiled']
+              },
+              refresh: {
+                  title: 'Recargar'
+              }
+          }
+      },
+      legend: {
+          orient: 'horizontal',
+          x: 'center',
+          y: 'bottom',
+          textStyle: {
+              color: '#333'
+          },
+          data: datos.series.map(function(item) { return item.name; })
+      }
+  };
+  
+  chartLine.setOption(optionsLine);
+}
+
+  
+</script>
+
+
+
+{% endblock javascripts %}

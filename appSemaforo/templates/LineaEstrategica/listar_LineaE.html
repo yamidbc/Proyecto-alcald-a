@@ -1,0 +1,153 @@
+{% extends 'index_master.html' %}
+{% load static %}
+{% block Titulo %}
+  AppSemaforo| Listado de Linea Estrategica
+{% endblock Titulo%}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}' %}" rel="stylesheet">
+
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+{% endblock stylesheets %}
+
+{% block content %}
+  <!-- page content -->
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1>Gestión de Linea Estrategica</h1>
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+    <div class= "card-body"> 
+    <table id="tabla-usuarios" class="table table-striped table-bordered" cellspacing="0" width="100%">
+      {%if request.user.is_staff %}
+      <a href="{% url "agregar_LineaE"%}" title="Agregar Línea Estratégica" class="btn btn-primary"><i class="fa fa-sitemap"> </i> Nueva Línea Estratégica</a>
+      {% endif %}
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Codigo de Línea Estratégica</th>
+          <th scope="col">Nombre</th>
+          
+          <th scope="col">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for Linea in object_list %}
+        <tr>
+          <th scope="row">{{ Linea.id }}</th>
+          <td>{{ Linea.Cod_LineaEstrategica }}</td>
+          <td>{{ Linea.Nombre }}</td>
+          
+
+          <td>
+            {%if request.user.is_staff and not request.user.is_guest%}
+            <a href="{% url "eliminar_LineaE" pk=Linea.id%}" title="Eliminar Línea Estratégica" class ="btn btn-danger" ><i class="fa fa-trash-o"></i> Eliminar</a>
+            {% endif %}
+            {%if request.user.is_staff and not request.user.is_guest%}
+            <a href="{% url "actualizar_LineaE" pk=Linea.id%}" title="Actualizar Línea Estratégica" class ="btn btn-success"><i class="fa fa-edit"> </i> Actualizar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<!-- Ventana modal para eliminar registro -->
+<div class="modal fade" id="eliminarRegistro" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Eliminar registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de eliminar este registro?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <form id="form-eliminar" method="post">
+          {% csrf_token %}
+          <input type="hidden" id="id-registro" name="id">
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+   
+</div>
+</div>
+  <!-- /top tiles -->
+{% endblock content %}
+<div>
+
+
+</div>
+{% block javascripts %}
+  {{ block.super }}
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/jszip/dist/jszip.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/pdfmake.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/vfs_fonts.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script> 
+  <script src="{% static '/FrWork/admin_lte/build/js/tabla.js' %}"></script> 
+  <script> 
+    $(document).ready(function() { 
+        console.log("Document .ready"); 
+        $('#tabla-usuarios').DataTable({ 
+            "language": { 
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json" 
+            }, 
+            dom: "lBfrtip", 
+            scrollX: true, 
+            responsive: true, 
+            buttons: [ 
+            {
+              extend: 'copyHtml5',
+              text: '<i class="fa fa-copy"></i> Copiar',
+              title: 'Mi Reporte',
+              exportOptions: {
+                columns: [0, 1, 2] 
+              }
+            },
+            {
+              extend: 'excelHtml5',
+              text: '<i class="fa fa-file-excel-o"></i> Excel',
+              title: 'Mi Reporte',
+              exportOptions: {
+                columns: [0, 1, 2] 
+              }
+            },
+
+            {
+              extend: 'print',
+              text: '<i class="fa fa-print"></i> Imprimir',
+              title: 'Mi Reporte',
+              exportOptions: {
+                columns: [0, 1, 2] 
+              }
+            }
+            ] 
+        }); 
+    }); 
+</script>  
+{% endblock javascripts %}
+
+

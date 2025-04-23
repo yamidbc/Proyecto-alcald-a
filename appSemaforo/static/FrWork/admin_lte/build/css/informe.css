@@ -1,0 +1,25 @@
+
+.card-body {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    margin-bottom: 10px;
+  }
+  
+  .row {
+    margin-bottom: 20px;
+  }
+  
+  .col-md-6 {
+    padding: 10px;
+  }
+  

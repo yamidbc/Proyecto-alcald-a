@@ -1,0 +1,9 @@
+{% extends 'login.html' %}
+
+{% block contenido %}
+  <h1>Cerrar sesión</h1>
+  <form id="logout-form" method="post" style="display:none;">
+    {% csrf_token %}
+</form>
+{% endblock %}
+

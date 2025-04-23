@@ -1,0 +1,319 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="{% static '/FrWork/admin_lte/build/images/favicon.png'%}" type="image/ico" />
+
+    <title>APP SEMAFORO| </title>
+
+    <!-- Bootstrap -->
+    <link href="{% static '/FrWork/admin_lte/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static '/FrWork/admin_lte/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static '/FrWork/admin_lte/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static '/FrWork/admin_lte/vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="{% static '/FrWork/admin_lte/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static '/FrWork/admin_lte/vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static '/FrWork/admin_lte/vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="{% static '/FrWork/admin_lte/build/css/custom.min.css' %}" rel="stylesheet">
+  
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% block stylesheets %}
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+    
+    <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/footer.css' %}">
+    <script src="{% static '/FrWork/admin_lte/vendors/jszip/dist/jszip.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% endblock stylesheets %}
+  </head>
+
+  <body class="nav-md">
+    {% block body %}
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="{% url "home" %}" class="site_title">
+                <img 
+                  src="{% static  '/FrWork/admin_lte/build/images/icono.jpg'%}" 
+                  alt="Mi Imagen" 
+                  width="35" 
+                  height="35" 
+                  style="border-radius: 50%; margin-right: 10px;"
+                />
+                <span>Alcaldía Sotará</span>
+              </a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="{% static '/FrWork/admin_lte/build/images/perfil.jpg'%}" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Bienvenido(a),</span>
+                <h2>{{ usuario_logeado }}</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> 
+              <div class="menu_section"> 
+                <ul class="nav side-menu"> 
+                  <li class="active" ><a href="{% url "home" %}"><i class="fa fa-home"></i> Home </a> </li> 
+                 {%if request.user.is_staff %}
+                  <li class="active"class="active" ><a><i class="fa fa-user"></i> Usuarios <span class="fa fa-chevron-down"></span></a> 
+                    <ul class="nav child_menu"> 
+                      <li class="active" ><a href="{% url "listar" %}"><i class="fa fa-users"></i>listar</a></li> 
+                      
+                    </ul> 
+                  </li> 
+                  {%  endif %}
+                  <li class="active"><a><i class="fa fa-sitemap"></i> Linea estrategica<span class="fa fa-chevron-down"></span></a> 
+                    <ul class="nav child_menu"> 
+                      <li class="active"><a href="{% url "listar_LineaE" %}"><i class="fa fa-list-ol"></i>Listar</a></li> 
+                      
+                      <li class="has-submenu"><a><i class="fa fa-bank" ></i>Pilar Sectorial<span class="fa fa-chevron-down"></span></a> 
+                        <ul class="nav child_menu"> 
+                          <li ><a href="{% url "listar_pilarS" %}"><i class="fa fa-list-ol"></i>Listar</a></li> 
+                          
+                        </ul> 
+                      </li> 
+
+                      <li class="has-submenu"><a><i class="fa fa-cube"></i>Programa<span class="fa fa-chevron-down"></span></a> 
+                        <ul class="nav child_menu"> 
+                          <li ><a href="{% url "listar_programa" %}"><i class="fa fa-list-ol"></i>Listar</a></li> 
+                          
+                        </ul> 
+                      </li> 
+
+                      <li class="has-submenu"><a><i class="fa fa fa-flag"></i>Meta<span class="fa fa-chevron-down"></span> 
+                        <ul class="nav child_menu"> 
+                          {%if request.user.is_staff %}
+                          <li><a href="{% url "listar_indicador_producto" %}"><i class="fa fa-tachometer"></i>Indicador Meta</a></li> 
+                          <li><a href="{% url "listar_Contrato" %}"><i class="fa fa-file-text-o"></i>Contrato</a></li> 
+                          {%  endif %}
+                          <li ><a href="{% url "listar_producto" %}"><i class="fa fa-list-ol"></i>Listar</a></li> 
+                          
+                        </ul> 
+                      </li> 
+                      
+                    </ul> 
+                  </li> 
+                  
+                  {%if request.user.is_staff %}
+                  <li class="active" ><a href="{% url "historico_producto" %}"><i class="fa fa-clock-o"></i> Historial<span ></span></a> </li>
+                  {%  endif %}
+              </div> 
+              
+            </div>
+            <!-- /sidebar menu -->
+
+           
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav">
+              <ul class=" navbar-right">
+                <li class="nav-item dropdown open" style="padding-left: 15px;">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                    <img src="{% static '/FrWork/admin_lte/build/images/perfil.jpg'%}" alt="">{{ usuario_logeado }}
+                  </a>
+                  <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                    {%if request.user.is_staff %}
+                    <a class="dropdown-item"  href="{% url "perfil"%}"> Perfil</a>
+                    {%  endif %}
+
+                  <a class="dropdown-item"  href="javascript:;">Ayuda</a>
+                  <a href="#" id="cerrar-sesion" class="dropdown-item" data-toggle="modal" data-target="#modal-cerrar-sesion"><i class="fa fa-sign-out pull-right"></i> Cerrar sesión</a>
+                  </div>
+                </li>
+            
+
+               <!--notificaciones-->
+
+               <!--notificaciones-end-->
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- Ventana modal de confirmación -->
+<div class="modal fade" id="modal-cerrar-sesion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmar cierre de sesión</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de cerrar la sesión?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar sesión</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /top navigation -->
+
+
+
+        <!-- ****************************************   -->
+
+        {% block content %}
+        {% endblock %}
+
+
+        <!-- footer content -->
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="{% static '/FrWork/admin_lte/vendors/jquery/dist/jquery.min.js' %}"></script>
+    
+    <!-- Bootstrap -->
+    <script src="{% static '/FrWork/admin_lte/vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static '/FrWork/admin_lte/vendors/fastclick/lib/fastclick.js' %}"></script>
+    <!-- NProgress -->
+    <script src="{% static '/FrWork/admin_lte/vendors/nprogress/nprogress.js' %}"></script>
+    <!-- Chart.js -->
+    <script src="{% static '/FrWork/admin_lte/vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static '/FrWork/admin_lte/vendors/gauge.js/dist/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static '/FrWork/admin_lte/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static '/FrWork/admin_lte/vendors/iCheck/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static '/FrWork/admin_lte/vendors/skycons/skycons.js' %}"></script>
+    <!-- Flot -->
+    <script src="{% static '/FrWork/admin_lte/vendors/Flot/jquery.flot.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/Flot/jquery.flot.resize.js' %}"></script>
+    <!-- Flot plugins -->
+    <script src="{% static '/FrWork/admin_lte/vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/flot.curvedlines/curvedLines.js' %}"></script>
+    <!-- DateJS -->
+    <script src="{% static '/FrWork/admin_lte/vendors/DateJS/build/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static '/FrWork/admin_lte/vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static '/FrWork/admin_lte/vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static '/FrWork/admin_lte/vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="{% static '/FrWork/admin_lte/build/js/custom.min.js' %}"></script>
+    
+    {% block javascripts %}
+  <!-- Datatables -->
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/dataTables.buttons.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.flash.min.j'%}s"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.html5.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons/js/buttons.print.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive/js/dataTables.responsive.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/datatables.net-scroller/js/dataTables.scroller.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/jszip/dist/jszip.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/pdfmake.min.js'%}"></script>
+  <script src="{% static '/FrWork/admin_lte/vendors/pdfmake/build/vfs_fonts.js'%}"></script>
+
+
+  <script>
+    $(document).ready(function() {
+      $('#cerrar-sesion').on('click', function(event) {
+        event.preventDefault();
+        $('#modal-cerrar-sesion').modal('show');
+      });
+    });
+  </script>
+{% endblock javascripts %}
+{% endblock %}	
+<!-- Footer -->
+
+  </body>
+  <footer class="text-center" style="background-color:#2a3f54;">
+    <div class="container p-4">
+      <div class="row">
+        <div class="col-md-4">
+          <!-- Información de contacto -->
+          <h3>Alcaldía Municipal de Sotará, Cauca</h3>
+          <p>Dirección: Edificio CAM Paispamba - Sotará - Cauca Calle 1 Nº 01 barrio Centro - Código Postal 193501</p>
+          <p>Horario de atención: Martes a Viernes de 8:00 A.M. A 1:00 P.M. Y 1:30P.M. A 5:00 P.M - Sábado de 08:00 A.M</p>
+        </div>
+        <div class="col-md-4">
+          <!-- Redes sociales -->
+          <h3>Redes sociales</h3>
+          <a class="btn btn-primary btn-floating m-1" title="Facebook alcaldia de Sotará" style="background-color: #3b5998" href="https://www.facebook.com/AlcaldiaSotara/" role="button" target="_blank"><i class="fa fa-facebook-square"></i></a>
+          <a class="btn btn-primary btn-floating m-1" title="Twitter alcaldia de Sotará" style="background-color: #55acee" href="https://twitter.com/search?q=%40AlcaldiaSotara&src=typd/" role="button" target="_blank"><i class="fa fa-twitter"></i></a>
+          <a class="btn btn-primary btn-floating m-1" title="Canal de la alcaldia de Sotará" style="background-color: #DE2A23" href="https://www.youtube.com/channel/UCQdAtAR9hs2rTUSCQXWF-Sg/videos/" role="button" target="_blank"><i class="fa fa-youtube"></i></a>
+          <a class="btn btn-primary btn-floating m-1" title="Instagram alcaldia de Sotará" style="background-color: #E1306C" href="https://www.instagram.com/alcaldiasotara/?hl=es-la/" role="button" target="_blank"><i class="fa fa-instagram"></i></a>
+          
+        </div>
+        <div class="col-md-4">
+          <!-- Información adicional -->
+          <h3>Información adicional</h3>
+          <p>Teléfono Conmutador: 3148947379</p>
+          <p>Teléfono móvil: 3148947379</p>
+          <p>Línea de atención gratuita: 3148947379</p>
+          <p>Línea anticorrupción: 018000919748</p>
+          <p>Correo institucional: alcaldia@sotara-cauca.gov.co</p>
+          <p>Correo de notificaciones judiciales: alcaldia@sotara-cauca.gov.co</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+  <!-- Grid container -->
+
+</html>

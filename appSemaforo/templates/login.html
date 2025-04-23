@@ -1,0 +1,97 @@
+
+{% load  static %}
+
+{% block content %}
+{% block title %} {% endblock title %}
+
+{% block stylesheets %}
+  
+  <!-- Animate.css' %} -->
+ 
+
+{% endblock stylesheets %}
+
+{% block body_class %}{% endblock body_class %}
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AppSemaforo | </title>
+  
+  <link href="{% static '/FrWork/admin_lte/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+  
+  <link href="{% static '/FrWork/admin_lte//vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  
+  <link href="{% static '/FrWork/admin_lte/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+  
+  <link href="{% static '/FrWork/admin_lte/vendors/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/build/css/custom.min.css' %}" rel="stylesheet">
+  <link rel="icon" href="{% static '/FrWork/admin_lte/build/images/favicon.png'%}" type="image/ico" />
+
+  <meta name="robots" content="noindex, follow">
+
+</head>
+{% block body %}
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+{% if messages %}
+  {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% else %}
+      <div class="alert alert-danger">{{ message }}</div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+
+          <form action="" method="post">
+            {% csrf_token %}
+            <img src="{% static 'FrWork/admin_lte/build/images/logo.jpg' %}" alt="Alcaldía de Sotará" class="logo" 
+            width="120" 
+            height="120" 
+            >
+            <section class="login_content">
+              
+            <h1>Inicio de sesion</h1>
+            {{form.as_p}}
+            <button type="submit" class"">Iniciar sesión</button>
+
+            <div>
+            
+              
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <p class="change_link">¿eres nuevo usuario?
+                <a href="{% url "registrar_publico" %}" class="to_register"> Crear cuenta </a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <h1><i class="fa fa-bar-chart"></i> App SEMAFORO</h1>
+                <p>©2024 Todos los derechos reservados. Autor privacidad y términos</p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
+<!--javascript-->
+{% block javascripts %}
+<script src="{% static '/FrWork/admin_lte/build/js/tabla.js' %}"></script> 
+{% endblock javascripts %}
+{% endblock %}

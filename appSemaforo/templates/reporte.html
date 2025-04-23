@@ -1,0 +1,42 @@
+<!-- reporte.html -->
+
+{% extends 'index_master.html' %}
+
+{% load static %}
+
+
+{% block body %}
+    <h1>Reporte de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Valor Actual</th>
+                <th>Meta Actual</th>
+                <th>Presupuesto</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in datos %}
+                <tr>
+                    <td>{{ producto.ID_Producto }}</td>
+                    <td>{{ producto.Nombre_Producto }}</td>
+                    <td>{{ producto.Descripcion }}</td>
+                    <td>{{ producto.Valor_Actual }}</td>
+                    <td>{{ producto.Meta_Actual }}</td>
+                    <td>{{ producto.Presupuesto }}</td>
+                    <td>{{ producto.Estado }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Gráfico de Torta</h2>
+    <div id="grafico-torta"></div>
+    <h2>Gráfico de Línea</h2>
+    <div id="grafico-linea"></div>
+{% endblock %}
+
+</body>

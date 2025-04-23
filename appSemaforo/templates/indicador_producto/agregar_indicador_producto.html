@@ -1,0 +1,39 @@
+{% extends 'index_master.html' %}
+
+{% block content %}
+
+    <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+        
+      <h1>Agregar Indicador</h1>
+
+      <div class= "card-body">
+       <form method="POST" >
+
+        
+        {% csrf_token %}
+        
+        {{form.as_p}}
+      <div class="card-footer">
+        <div>
+        <a href={%url "listar_indicador_producto"%} class="btn btn-secondary ">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Agregar</button>
+      </div>
+    </div>
+
+    </form>
+
+            
+        
+          
+        
+      </div>
+    </div>
+          <!-- /top tiles -->
+
+          
+                <!-- end of weather widget -->
+              
+        <!-- /page content -->
+{% endblock %}

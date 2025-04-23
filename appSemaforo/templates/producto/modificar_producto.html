@@ -1,0 +1,125 @@
+
+{% extends 'index_master.html' %}
+{% block content %}
+<!-- page content -->
+<div class="right_col" role="main">
+<!-- top tiles -->
+<h1>Actualizar Meta</h1>
+
+<div class="card-body">
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+<form method="POST" enctype="multipart/form-data" id="form-actualizar-producto">
+{% csrf_token %}
+{{ form.as_p }}
+<div>
+    <div>
+        <button type="button" class="btn btn-primary" onclick="calcularPresupuestoTotal()">Calcular</button>
+    </div>
+<p>Usuario Propietario: {{ producto.ID_usuarioPropietario }}</p>
+</div>
+{% if producto.soporte %}
+<p> Soporte 1: <a href="{% url 'descargar_archivo' producto.id %}"><i class="fa fa-file"></i> {{ producto.soporte }}</a></p>
+{% endif %}
+{% if producto.soporte_2 %}
+<p> Soporte 2: <a href="{% url 'descargar_archivo2' producto.id %}"><i class="fa fa-file"></i> {{ producto.soporte_2 }}</a></p>
+{% endif %}
+<div class="card-footer">
+<div>
+<a href="{% url 'listar_producto' %}" class="btn btn-secondary">Cancelar</a>
+<button type="button" class="btn btn-success" onclick="abrirModal()">Actualizar</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<!-- /page content -->
+
+<!-- Modal de confirmación -->
+<div id="modal-confirmacion" class="modal fade" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title">Confirmación</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<p>¿Estás seguro de que deseas actualizar la meta?</p>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+<button type="button" class="btn btn-success" onclick="document.getElementById('form-actualizar-producto').submit()">Aceptar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- javascript -->
+<script>
+function abrirModal() {
+$('#modal-confirmacion').modal('show');
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const mostrarPresupuestoAdicional = document.getElementById('id_mostrar_presupuesto_adicional');
+    const presupuestoAdicional = document.getElementById('{{ form.presupuesto_adicional.id_for_label }}');
+    const presupuestoTotal = document.getElementById('id_presupuesto_total');
+
+    mostrarPresupuestoAdicional.addEventListener('change', function() {
+        if (this.checked) {
+            presupuestoAdicional.disabled = false;
+            presupuestoTotal.disabled = false;
+        } else {
+            presupuestoAdicional.disabled = true;
+            presupuestoTotal.disabled = true;
+            presupuestoTotal.value = '';
+        }
+    });
+
+    // Habilitar o deshabilitar el campo presupuesto_adicional según el estado del checkbox
+    if (mostrarPresupuestoAdicional.checked) {
+        presupuestoAdicional.disabled = false;
+    } else {
+        presupuestoAdicional.disabled = true;
+    }
+});
+</script>
+<script>
+    function calcularPresupuestoTotal() {
+        var form = document.getElementById('form-actualizar-producto');
+        var campos = form.elements;
+        var presupuestoTotal = 0;
+        var contratos = [
+            campos['Contrato_1'].value,
+            campos['Contrato_2'].value,
+            campos['Contrato_3'].value,
+            campos['Contrato_4'].value,
+            campos['Contrato_5'].value,
+        ];
+        var contratoObj = {{ contratos_json|safe }};
+        for (var i = 0; i < contratos.length; i++) {
+            if (contratos[i] != '') {
+                var contratoId = contratos[i];
+                for (var j = 0; j < contratoObj.length; j++) {
+                    if (contratoObj[j].id === parseInt(contratoId)) {
+                        presupuestoTotal += parseFloat(contratoObj[j].Valor);
+                        break;
+                    }
+                }
+            }
+        }
+        document.getElementById('id_presupuesto_total').value = presupuestoTotal;
+    }
+</script>
+{% endblock %}

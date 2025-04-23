@@ -1,0 +1,47 @@
+{% extends 'index_master.html' %}
+
+{% load static %}
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/informe.css' %}">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+    <!-- page content -->
+    <div class="right_col" role="main">
+        <h1>Reprogramar Vigencia</h1>
+        <form method="post" id="form-reprogramar">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-confirmar">Reprogramar</button>
+            <a href="{% url 'listar_producto' %}" class="btn btn-secondary">Volver</a>
+        </form>
+        <!-- Modal de confirmación -->
+        <div class="modal fade" id="modal-confirmar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmar reprogramación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas reprogramar la vigencia?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="form-reprogramar" class="btn btn-warning">Reprogramar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

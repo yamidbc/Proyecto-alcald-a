@@ -1,0 +1,178 @@
+{% extends 'index_master.html' %} 
+{% load static %} 
+
+{% block content %} 
+  <!-- page content -->
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="x_panel">
+      <div class="x_title">
+        <h1>Bienvenido, {{ username }}!</h1>
+      </div>
+      
+      <div class="x_content">
+        <h4>Estás accediendo a nuestra plataforma de gestión de nuestro plan de desarrollo municipal.</h4>
+        <h4>A continuación podras dirigirte a nuestro plan de desarrollo y su ejecución presionando la opción que verás a continuación.</h4>
+      </div>
+      <div style= ""><a href="{% url 'listar_producto' %}"  class="btn btn-success">Continuar</a></div>
+    </div>
+    
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Gestión de usuarios</h2>
+      </div>
+      
+      <div class="x_content">
+        <div id="mainb" style="height:350px; margin: 0 auto;"></div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %} 
+  {{ block.super }}
+  
+  <!-- ECharts -->
+  <script src="{% static 'FrWork/admin_lte/vendors/echarts/dist/echarts.min.js' %}"></script>
+  <script src="{% static 'FrWork/admin_lte/vendors/echarts/map/js/world.js' %}"></script>
+<script>
+  $.ajax({
+    url: '{% url "grafico_barras" %}',
+    method: 'GET',
+    success: function(data) {
+      var chart = echarts.init(document.getElementById('mainb'), {
+        theme: 'gentelella',
+      });
+      chart.setOption({
+        color: ['#34a85a'],
+        title: {
+          text: 'app Semaforo',
+          subtext: 'Resumen de usuarios creados en el sistemas por mes',
+          x: 'center',
+          y: 20,
+          textStyle: {
+            fontSize: 18,
+            color: '#333',
+          },
+        },
+        legend: {
+          data: ['Usuarios creados'],
+          orient: 'vertical',
+          right: 10,
+          top: 20,
+          textStyle: {
+            fontSize: 14,
+            color: '#333',
+          },
+          selectedMode: 'single',
+        },
+        grid: {
+          left: 50,
+          right: 50,
+          bottom: 50,
+          top: 100,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'category',
+          data: data.xAxis,
+          axisLabel: {
+            interval: 0,
+            rotate: 45,
+            fontSize: 16,
+            color: '#333',
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#337ab7',
+            },
+          },
+          axisPointer: {
+            type: 'line',
+            lineStyle: {
+              color: '#337ab7',
+              type: 'dashed',
+            },
+          },
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 10,
+          interval: 1,
+          axisLine: {
+            lineStyle: {
+              color: '#337ab7',
+            },
+          },
+          axisTick: {
+            lineStyle: {
+              color: '#337ab7',
+            },
+          },
+          axisLabel: {
+            fontSize: 16,
+            color: '#333',
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#ddd',
+              type: 'dashed',
+            },
+          },
+          axisPointer: {
+            type: 'line',
+            lineStyle: {
+              color: '#337ab7',
+              type: 'dashed',
+            },
+          },
+        },
+        series: [
+          {
+            data: data.series,
+            type: 'bar',
+            barWidth: 20,
+            itemStyle: {
+              color: '#34a85a',
+              borderType: 'dashed',
+              borderColor: '#333',
+              borderWidth: 2,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10,
+              shadowOffsetX: 5,
+              shadowOffsetY: 5,
+            },
+            emphasis: {
+              itemStyle: {
+                color: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+            label: {
+              show: true,
+              position: 'top',
+              fontSize: 14,
+              color: '#333',
+            },
+          },
+        ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'line',
+            lineStyle: {
+              color: '#337ab7',
+              type: 'dashed',
+            },
+          },
+          formatter: function(params) {
+            return params[0].name + ': ' + params[0].value;
+          },
+        },
+      });
+    },
+  });
+</script>
+
+  
+{% endblock javascripts %}

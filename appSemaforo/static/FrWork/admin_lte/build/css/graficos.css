@@ -1,0 +1,18 @@
+.x_content {
+    padding: 20px;
+  }
+  
+  .x_panel {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+.formulario-centrado {
+    margin: 0 auto;
+    width: 50%; /* ajusta el ancho según sea necesario */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

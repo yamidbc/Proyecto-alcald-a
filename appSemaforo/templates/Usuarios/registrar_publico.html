@@ -1,0 +1,134 @@
+{% extends "login.html" %}
+
+{% load static %}
+
+{% block content %}
+
+{% block title %} {% endblock title %}
+
+{% block stylesheets %}
+    <!-- Animate.css' %} -->
+    <link href="{% static '/FrWork/admin_lte/vendors/animate.css/animate.min.css'%}" rel="stylesheet">
+    <link rel="icon" href="{% static '/FrWork/admin_lte/build/images/favicon.png'%}" type="image/ico" />
+{% endblock stylesheets %}
+
+{% block body_class %}{% endblock body_class %}
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AppSemaforo | </title>
+    <link href="{% static '/FrWork/admin_lte/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte//vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/vendors/animate.css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static '/FrWork/admin_lte/build/css/custom.min.css' %}" rel="stylesheet">
+    
+</head>
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-center">Registro de Usuario</h2>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        {{ message }}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        {{ message }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" action="{% url 'registrar_publico' %}" id="form-registrar">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                {{ form.username.label_tag }}
+                                {{ form.username }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.email.label_tag }}
+                                {{ form.email }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.Nombre.label_tag }}
+                                {{ form.Nombre }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.Apellidos.label_tag }}
+                                {{ form.Apellidos }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.Telefono.label_tag }}
+                                {{ form.Telefono }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.Cargo_usuario.label_tag }}
+                                {{ form.Cargo_usuario }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.password.label_tag }}
+                                {{ form.password }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.password1.label_tag }}
+                                {{ form.password1 }}
+                            </div>
+
+                            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modal-confirmar">Registrarse</button>
+
+                            <a class="reset_pass text-center" href="{% url 'login' %}">Ya tienes cuenta? Inicia sesión</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Ventana modal de confirmación -->
+<div class="modal fade" id="modal-confirmar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  <div class="modal-content">
+  <div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Confirmar registro</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+  <div class="modal-body">
+  ¿Estás seguro de que deseas registrarte?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+  <button type="submit" form="form-registrar" class="btn btn-success">Registrarse</button>
+  </div>
+  </div>
+  </div>
+  </div>
+  <script src="{% static '/FrWork/admin_lte/vendors/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static '/FrWork/admin_lte/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  {% endblock body %}
+  {% endblock %}

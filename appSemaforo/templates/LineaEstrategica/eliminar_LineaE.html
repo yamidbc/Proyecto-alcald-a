@@ -1,0 +1,19 @@
+{% extends 'index_master.html' %}
+
+{% block content %}
+<div class="right_col" role="main">
+  {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+<h1>Eliminar Linea Estrategica</h1>
+
+  <p>¿Estás seguro de que deseas eliminar la Linea Estrategica {{ object.Nombre }}?</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'listar_LineaE' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

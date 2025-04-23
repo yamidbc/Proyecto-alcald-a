@@ -1,0 +1,47 @@
+
+/* bombilla.css */
+.bombilla {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #000; /* Borde de 1px de color negro */
+}
+
+.verde {
+  background-color: #00FF00;
+}
+
+.amarillo {
+  background-color: #f1f50a;
+}
+
+.rojo {
+  background-color: #FF0000;
+}
+
+.bombilla-apagada {
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.parpadeo-medio {
+  animation: parpadeo 2s infinite;
+}
+
+.parpadeo-rapido {
+  animation: parpadeo 1s infinite;
+}
+
+@keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

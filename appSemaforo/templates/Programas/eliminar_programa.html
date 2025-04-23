@@ -1,0 +1,13 @@
+{% extends 'index_master.html' %}
+
+{% block content %}
+<div class="right_col" role="main">
+<h1>Eliminar Programa</h1>
+  <p>¿Estás seguro de que deseas eliminar el Programa {{ object.Nombre_Programa }}?</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'listar_programa' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

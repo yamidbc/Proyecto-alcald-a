@@ -1,0 +1,46 @@
+.calificacion {
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.Alto {
+    background-color: #5bdd49; /* Amarillo */
+    color: #fffbfb;
+}
+
+.Medio {
+    background-color: #ecec52; /* Amarillo claro */
+    color: #030303;
+}
+
+.Bajo {
+    background-color: #FF0000; /* Rojo */
+    color: #fff;
+}
+
+.No-aplica {
+    background-color: #CCCCCC; /* Gris */
+    color: #666;
+}
+
+
+.progress-bar {
+    background-color: #1ABB9C !important; /* Verde */
+  }
+  
+  .progress-bar[aria-valuenow^="0-24"] {
+    background-color: #ff0000 !important; /* Rojo */
+  }
+  
+  .progress-bar[aria-valuenow^="25-49"] {
+    background-color: #ffff00 !important; /* Amarillo */
+  }
+  
+  .progress-bar[aria-valuenow^="50-74"] {
+    background-color: #00ffff !important; /* Azul claro */
+  }
+  
+  .progress-bar[aria-valuenow^="75-100"] {
+    background-color: #00ff00 !important; /* Verde */
+  }

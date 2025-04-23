@@ -1,0 +1,89 @@
+
+{% extends 'index_master.html' %}
+{% load static%}
+{% load filters %}
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}' %}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/informe.css' %}">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+{% endblock stylesheets %}
+{% block content %}
+  <!-- page content -->
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1>Detalles de la meta</h1>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Identificadores de la meta</h4>
+          <p>Código: {{ producto.Codigo_producto }}</p>
+          <p>Nombre: {{ producto.Nombre_Producto }}</p>
+          <p>Descripción: {{ producto.Descripción }}</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Información de medición</h4>
+          <p>Medición: {{ producto.Medición }}</p>
+          <p>Unidad de medida: {{ producto.Unidad_de_medida }}</p>
+          <p>Indicador: {{ producto.ID_Indicador }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Indicadores Metas pasadas vs Meta y avance actuales</h4>
+          <p>Línea base: {{ producto.Linea_base }}</p>
+          <p>Meta Actual: {{ producto.Meta_Actual }}</p>
+          <p>Valor Actual: {{ producto.Valor_actual }}</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Estructura gerárquica de la meta</h4>
+          <p>Línea Estratégica: {{ producto.ID_LineaEstrategica }}</p>
+          <p>Secretaria responsable: {{ producto.Secretario_responsable }}</p>
+          <p>Pilar sectorial: {{ producto.ID_Pilar_Sectorial }}</p>
+          <p>Programa: {{ producto.ID_programa }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Usuarios relacionados y vigencia de la meta</h4>
+          <p>Usuario propietario: {{ producto.ID_usuarioPropietario }}</p>
+          <p>Usuario asignado: {{ producto.ID_usuarioAsignado }}</p>
+          <p>Vigencia: {{ producto.vigencia }}</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Información presupuestal de la meta</h4>
+          <p>Presupuesto para  el cumplimiento de la meta:{{producto.presupuesto_total}} </p>
+          <p>Presupuesto utilizado:{{producto.Presupuesto_utilizado}} </p>
+          
+          
+        </div>
+        <div class="col-md-6">
+          <H4>Archivos de soporte</H4>
+          {% if producto.soporte %}
+          <p> Soporte 1: <a href="{% url 'descargar_archivo' producto.id %}"><i class="fa fa-file"></i> {{ producto.soporte }}</a></p>
+          {% endif %}
+          {% if producto.soporte_2 %}
+          <p> Soporte 2: <a href="{% url 'descargar_archivo2' producto.id %}"><i class="fa fa-file"></i> {{ producto.soporte_2 }}</a></p>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <H4>Contratos asociados</H4>
+          <p> Contrato 1: {{ producto.Contrato_1 }} | Valor del contrato : {{producto.Contrato_1.Valor}}</a></p>
+          
+          <p> Contrato 2: {{ producto.Contrato_2 }} | Valor del contrato : {{producto.Contrato_2.Valor}}</p>
+          <p> Contrato 3: {{ producto.Contrato_3 }} | Valor del contrato : {{producto.Contrato_3.Valor}}</p>
+          <p> Contrato 4: {{ producto.Contrato_4 }} | Valor del contrato : {{producto.Contrato_4.Valor}}</p>
+          <p> Contrato 5: {{ producto.Contrato_5 }} | Valor del contrato : {{producto.Contrato_5.Valor}}</p>
+          
+        </div>
+      </div>
+      <a href={% url "listar_producto" %} class="btn btn-secondary">Volver</a>
+      
+    </div>
+  </div>
+{% endblock %}
