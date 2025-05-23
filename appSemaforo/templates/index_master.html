@@ -73,7 +73,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{% static '/FrWork/admin_lte/build/images/perfil.jpg'%}" alt="..." class="img-circle profile_img">
+                <img src="{% static '/FrWork/admin_lte/build/images/16363.png'%}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Bienvenido(a),</span>
@@ -151,14 +151,14 @@
               <ul class=" navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="{% static '/FrWork/admin_lte/build/images/perfil.jpg'%}" alt="">{{ usuario_logeado }}
+                    <img src="{% static '/FrWork/admin_lte/build/images/16363.png'%}" alt="">{{ usuario_logeado }}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     {%if request.user.is_staff %}
                     <a class="dropdown-item"  href="{% url "perfil"%}"> Perfil</a>
                     {%  endif %}
 
-                  <a class="dropdown-item"  href="javascript:;">Ayuda</a>
+                  <a class="dropdown-item"  href="javascript:;" onclick="abrirDocumento()">Ayuda</a>
                   <a href="#" id="cerrar-sesion" class="dropdown-item" data-toggle="modal" data-target="#modal-cerrar-sesion"><i class="fa fa-sign-out pull-right"></i> Cerrar sesión</a>
                   </div>
                 </li>
@@ -274,6 +274,12 @@
         $('#modal-cerrar-sesion').modal('show');
       });
     });
+
+    function abrirDocumento() {
+      window.open('https://drive.google.com/file/d/11F96fv-xxr4vwOcrn9ja_14aSzQxGV7R/view?usp=sharing', '_blank');
+    }  
+
+
   </script>
 {% endblock javascripts %}
 {% endblock %}	
