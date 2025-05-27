@@ -7,7 +7,7 @@
 {% block stylesheets %}
   {{ block.super }}
   <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}' %}" rel="stylesheet">
-
+  <link rel="stylesheet" type="text/css" href="{% static 'FrWork/admin_lte/build/css/footer.css' %}">
   <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static '/FrWork/admin_lte/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
@@ -61,7 +61,7 @@
         {% endfor %}
       </tbody>
     </table>
-
+<div class="clearfix"></div>
    
   </div>
 </div>
